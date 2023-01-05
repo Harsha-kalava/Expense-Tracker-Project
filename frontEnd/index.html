@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header id="'head">
+        <h1>Welcome to Expense Tracker App</h1>
+        <p>This is the place where you can track all your expenses on the fly</p>
+    </header>
+    <div id="formdiv">
+    <form method="POST" action="/submit" id="form">
+        <label for="name" class="large">Name</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email" class="large">Email</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password" class="large">Password</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Submit" id="submit">
+      </form> 
+      
+      <p class="form-p">Already have an account? <a href="/signin">Sign In</a></p>
+    </div>
+</body>
+</html>
