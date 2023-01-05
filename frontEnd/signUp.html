@@ -13,6 +13,7 @@
         <p>This is the place where you can track all your expenses on the fly</p>
     </header>
     <form onsubmit="signup(event)" id="form">
+        <p>Enter details to signup</p>
         <div class="formClass">
             <label for="name" class="large">Name</label>
             <input type="text" id="name" name="name" required><br>
@@ -25,12 +26,13 @@
             <label for="password" class="large">Password</label>
             <input type="password" id="password" name="password" required><br>
         </div>
-            
+        
         <button>submit</button>
       </form> 
-      
-      <p class="form-p">Already have an account? <a href="http://localhost:3000/user/signin">Sign In</a></p>
+      <div id="error1" class="'error"></div>
+      <div id="success" class="'error"></div>
+      <p class="form-p">Already have an account? <a href="./logIn.html">Sign In</a></p>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js" integrity="sha512-QTnb9BQkG4fBYIt9JGvYmxPpd6TBeKp6lsUrtiVQsrJ9sb33Bn9s0wMQO9qVBFbPX3xHRAsBHvXlcsrnJjExjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="script.js"></script>
+    <script src="signUp.js"></script>
 </body>
 </html>

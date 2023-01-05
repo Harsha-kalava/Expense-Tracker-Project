@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 app.use(userRoutes)
 
-sequelize.sync()
+sequelize.sync({alter:true})
 .then((res)=>{
     app.listen(3000,()=>{
         console.log('app started running on 3000')
