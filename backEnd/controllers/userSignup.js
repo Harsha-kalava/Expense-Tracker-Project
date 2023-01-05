@@ -37,10 +37,10 @@ exports.checkUser = async (req,res,next) =>{
         if(checker){
             // console.log(checker.password)
             if(checker.password === password){
-                return res.status(200).json({success:true,message:'found'})
+                return res.status(200).json({success:true,message:'User login successuful'})
             } 
             else{
-                return res.status(404).json({success:false,message:'password not matched'})
+                return res.status(401).json({success:false,message:'password not matched'})
             }        
         }
         else{
