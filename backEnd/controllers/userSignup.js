@@ -1,5 +1,6 @@
 
 const User = require('../models/userSignup')
+
 const bcrypt = require('bcrypt')
 
 
@@ -12,7 +13,6 @@ function isValidInput(str){
 }
 exports.addUser = async (req, res, next) => {
     const { name, email, password } = req.body;
-  
     if (isValidInput(name) || isValidInput(email) || isValidInput(password)) {
       res.status(500).json({ success: false, message: "empty fields" });
     } else {
@@ -43,7 +43,7 @@ exports.checkUser = async (req,res,next) =>{
           const echeck = await bcrypt.compare(password,checker.password)
             // console.log(echeck)
             if(echeck){
-              return res.status(200).json({success:true,message:'User login successuful'})
+              return res.status(200).json({success:true,message:'User login successuful',data:checker.id})
             } 
             else{
                 return res.status(401).json({success:false,message:'password not matched'})

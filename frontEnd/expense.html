@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="./style1.css">
+</head>
+<body>
+    <header id="'head">
+        <h2>Welcome to your dash board...</h2>
+    </header>
+    <div id="container">
+    <div id="sub1">
+    <form onsubmit="expense(event)" id="form">
+        <p class="text">Add expenses Here</p>
+        <div class="formClass">
+            <label for="price">Price</label>
+            <input type="text" id="price" name="price" required><br>
+        </div>
+        <div>
+            <label for="desc">Desc</label>
+            <input type="text" id="desc" name="desc" required><br>
+        </div>
+        <div>
+            <label for="categ">Categ</label>
+            <select name="categ" id="categ">
+                <option value="food">food</option>
+                <option value="movie">movie</option>
+                <option value="book">book</option>
+                <option value="travel">travel</option>
+              </select>
+        </div>
+
+        
+        <button>Add Expense</button>
+      </form> 
+    </div>
+        <div id="data">
+            <ul id="list"></ul>
+        </div>
+    
+</div>
+      <div id="success" class="'error"></div>
+      <!-- <p class="form-p">Don't have account. click to get one-> <a href="./signUp.html">Sign Up</a></p> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js" integrity="sha512-QTnb9BQkG4fBYIt9JGvYmxPpd6TBeKp6lsUrtiVQsrJ9sb33Bn9s0wMQO9qVBFbPX3xHRAsBHvXlcsrnJjExjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="expnese.js"></script>
+</body>
+</html>

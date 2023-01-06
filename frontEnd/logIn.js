@@ -9,19 +9,19 @@ async function login(e){
         console.log(userLoginData)
     
         const res = await axios.post('http://localhost:3000/user/login',userLoginData)
-        console.log(res,'response')
-        const parent = document.getElementById('success')
+        console.log(res.data.data,'response')
+        // const parent = document.getElementById('success')
         if(res.status === 200){
-            console.log('successfully created')
-            const para = document.createElement("p");
-            const textNode = document.createTextNode("Login successfull!!!");
-            para.appendChild(textNode);
-            parent.appendChild(para)
+            const email = userLoginData.email
+            const id = res.data.data
+            // console.log(email,'email')
+            sessionStorage.clear()
 
-            await setTimeout(function() {
-                document.getElementById('success').style.display = 'none';
-                location.reload()
-              }, 2000); // 5000 milliseconds = 5 seconds 
+            alert('login successfull')
+            // // Assuming that the login was successful
+            const data = {email:email,id:id}
+            sessionStorage.setItem("data",JSON.stringify(data))
+            window.location = 'expense.html';
         }
     }
     catch(err){
