@@ -20,12 +20,37 @@ async function login(e){
 
             await setTimeout(function() {
                 document.getElementById('success').style.display = 'none';
+                location.reload()
               }, 2000); // 5000 milliseconds = 5 seconds 
         }
-
     }
     catch(err){
-        
+        const parent = document.getElementById('success')
+        console.log(err.response.status)
+        if(err.response.status === 401){
+            console.log('password mismatch')
+            const para = document.createElement("p");
+            const textNode = document.createTextNode("Wrong password");
+            para.appendChild(textNode);
+            parent.appendChild(para)
+
+            await setTimeout(function() {
+                document.getElementById('success').style.display = 'none';
+                location.reload()
+              }, 2000); // 5000 milliseconds = 5 seconds 
+        }
+        if(err.response.status === 404){
+            console.log('password mismatch')
+            const para = document.createElement("p");
+            const textNode = document.createTextNode("You don't have account.Please create one");
+            para.appendChild(textNode);
+            parent.appendChild(para)
+
+            await setTimeout(function() {
+                document.getElementById('success').style.display = 'none';
+                location.reload()
+              }, 2000); // 5000 milliseconds = 5 seconds 
+        }
     }
     
 }

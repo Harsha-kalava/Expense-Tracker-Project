@@ -11,7 +11,7 @@ async function signup(e){
     const res = await axios.post('http://localhost:3000/user/signup',userSignupData)
         const parentElement = document.getElementById('success')
         console.log(res)
-        if(res.data.success==='true'){
+        if(res.status===201){
             const para = document.createElement("p");
             const textNode = document.createTextNode("Account successfully created!!!");
             para.appendChild(textNode);
@@ -19,7 +19,9 @@ async function signup(e){
 
             setTimeout(function() {
                 document.getElementById('success').style.display = 'none';
-              }, 1000); // 5000 milliseconds = 5 seconds
+                location.reload()
+              }, 2000); // 5000 milliseconds = 5 seconds
+            
         }
     }
     catch(err){
@@ -34,7 +36,9 @@ async function signup(e){
 
             await setTimeout(function() {
                 document.getElementById('error1').style.display = 'none';
-              }, 2000); // 5000 milliseconds = 5 seconds  
+                location.reload() 
+              }, 2000); // 5000 milliseconds = 5 seconds
+            
         }
         if(err.response.data.message === 'empty fields'){
             const para = document.createElement("p");
@@ -44,7 +48,9 @@ async function signup(e){
 
             await setTimeout(function() {
                 document.getElementById('error1').style.display = 'none';
-              }, 1000); // 5000 milliseconds = 5 seconds 
+                location.reload() 
+              }, 2000); // 5000 milliseconds = 5 seconds 
+              
         }
     }
     
