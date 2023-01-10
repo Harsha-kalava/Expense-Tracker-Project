@@ -1,6 +1,6 @@
 
 const User = require('../models/userSignup')
-
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 
@@ -11,6 +11,11 @@ function isValidInput(str){
         return false
     }
 }
+
+function generateAccessToken(id){
+  return jwt.sign({userId:id},'Harsha')
+}
+
 exports.addUser = async (req, res, next) => {
     const { name, email, password } = req.body;
     if (isValidInput(name) || isValidInput(email) || isValidInput(password)) {
@@ -23,7 +28,7 @@ exports.addUser = async (req, res, next) => {
             email: email,
             password: hash,
           });
-          res.status(201).json({ success: true, message: data });
+          res.status(201).json({ success: true, message: data});
         }
         catch (err) {
           res.status(500).json({ success: false, message: err });
@@ -43,7 +48,8 @@ exports.checkUser = async (req,res,next) =>{
           const echeck = await bcrypt.compare(password,checker.password)
             // console.log(echeck)
             if(echeck){
-              return res.status(200).json({success:true,message:'User login successuful',data:checker.id})
+              // data:checker.id
+              return res.status(200).json({success:true,message:'User login successuful',token:generateAccessToken(checker.id)})
             } 
             else{
                 return res.status(401).json({success:false,message:'password not matched'})

@@ -3,21 +3,9 @@ const User = require('../models/userSignup')
 
 exports.addExpense = async (req,res)=>{
     try{
-        const id = req.params.id
         const {price,desc,categ} = req.body
-        console.log(price,desc,categ)
-      // console.log(data)
-        const userTable = await User.findOne({where:{email:id}})
-        if(userTable){
-            let userid = userTable.id
-            const created = await Expense.create({
-                price:price,
-                desc:desc,
-                categ:categ,
-                userId:userid
-            })
-            return res.status(201).json({success:true,message:created})
-        }
+        const result =  await req.user.createExpense({price,desc,categ})
+        res.status(201).json({newExpense:[result],message:'successful'})
     }
     catch(err){
         res.status(500).json({success:false,message:'unable to create expense table'})
@@ -26,8 +14,7 @@ exports.addExpense = async (req,res)=>{
 
 exports.getExpense = async(req,res)=>{
     try{
-        const id = req.params.id
-        // console.log(id,'id')
+        const id = req.user.id
         const expenseData = await Expense.findAll({where:{userId:id}})
         if(expenseData){
             return res.status(200).json({success:true,message:expenseData})
@@ -40,21 +27,11 @@ exports.getExpense = async(req,res)=>{
 
 exports.delData = async(req,res)=>{
     try{
-        const user  = req.query.user
-        const listId = req.query.li
-        console.log(typeof(listId))
-        console.log(user,listId)
-        const findData = await Expense.findAll({where:{userId:user}})
-      
-        for(ele of findData){
-            console.log(ele.id)
-            if(ele.id === Number(listId)){
-                const toDel = await Expense.destroy({where:{id:ele.id}})
-                if(toDel){
-                    return res.status(200).json({success:true,message:'successfully deleted'})
-                } 
-            }
-        }
+        const user  = req.user.id
+        const listId = req.params.id
+        const expense = await Expense.destroy({where:{id:listId,userId:user}})
+        console.log(expense)
+        res.status(200).json({message:'successfully deleted'})
           
     }
     catch(err){

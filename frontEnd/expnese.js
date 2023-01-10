@@ -1,7 +1,3 @@
-let data = JSON.parse(sessionStorage.getItem("data"))
-email = data.email
-id = data.id
-console.log(email, id, "on dom")
 async function expense(e) {
   e.preventDefault();
 
@@ -11,9 +7,10 @@ async function expense(e) {
       desc: e.target.desc.value,
       categ: e.target.categ.value,
     };
+    const token = sessionStorage.getItem("token");
     const res = await axios.post(
-      `http://localhost:3000/expense/add/${email}`,
-      expenseData
+      'http://localhost:3000/expense/add',
+      expenseData,{headers:{"Authorization":token}}
     );
     console.log(res);
     showUserExpense()
@@ -31,11 +28,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function showUserExpense() {
+  const token = sessionStorage.getItem("token");
   const parentElement = document.getElementById("list");
   try {
     const expenseData = await axios.get(
-      `http://localhost:3000/expense/get/${id}`
+      'http://localhost:3000/expense/get',{headers:{"Authorization":token}}
     );
+    console.log(expenseData,'expense data')
     let data = expenseData.data.message;
     if (expenseData.status === 200) {
       // console.log(expenseData.data.message)
@@ -67,9 +66,10 @@ async function showUserExpense() {
 }
 
 async function delData(infoId) {
-    console.log(infoId)
+    console.log(infoId,'delete ID')
     try{
-        const delres = await axios.delete(`http://localhost:3000/expense/delData/?user=${id}&li=${infoId}`)
+        const token = sessionStorage.getItem('token')
+        const delres = await axios.delete(`http://localhost:3000/expense/delData/${infoId}`,{headers:{"authorization":token}})
         if(delres.status === 200){
             let ul = document.getElementById("list")
             let li = document.getElementById(infoId)

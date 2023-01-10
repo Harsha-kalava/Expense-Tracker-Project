@@ -9,19 +9,21 @@ async function login(e){
         console.log(userLoginData)
     
         const res = await axios.post('http://localhost:3000/user/login',userLoginData)
-        console.log(res.data.data,'response')
+        console.log(res,'response')
         // const parent = document.getElementById('success')
         if(res.status === 200){
-            const email = userLoginData.email
-            const id = res.data.data
+            // const email = userLoginData.email
+            // const id = res.data.data
             // console.log(email,'email')
             sessionStorage.clear()
 
             alert('login successfull')
+            console.log(res.data.token)
             // // Assuming that the login was successful
-            const data = {email:email,id:id}
-            sessionStorage.setItem("data",JSON.stringify(data))
-            window.location = 'expense.html';
+            // const data = {email:email,id:id}
+            // sessionStorage.setItem("data",JSON.stringify(data))
+            sessionStorage.setItem('token',res.data.token)
+            window.location = 'exp.html';
         }
     }
     catch(err){
