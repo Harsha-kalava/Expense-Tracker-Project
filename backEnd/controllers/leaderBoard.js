@@ -1,7 +1,6 @@
 const User = require('../models/userSignup')
 const Expense = require('../models/expense')
 const sequelize = require('sequelize');
-const { json } = require('sequelize');
 
 const userLeaderBoard = (req,res)=>{
     Expense.findAll({
