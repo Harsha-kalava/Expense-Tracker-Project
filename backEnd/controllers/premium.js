@@ -10,9 +10,7 @@ const purchasepremium =async (req, res) => {
         const amount = 2500;
 
         rzp.orders.create({amount, currency: "INR"}, (err, order) => {
-            // console.log(amount);
             if(err) {
-                // throw new Error(err);
                 console.log(err)
             }
             console.log("order.id",order.id)

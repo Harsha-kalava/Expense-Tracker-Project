@@ -9,6 +9,7 @@ header{
 h2{
     font-size: 2rem;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', Verdana, sans-serif;
+    margin-bottom: 0%;
 }
 
 p{
@@ -79,7 +80,7 @@ button{
 
 #sub1{
     display: flex;
-    width: 30%;
+    width: 25%;
     padding-left: 30px;
 }
 
@@ -110,6 +111,7 @@ button{
 .litext{
     font-size: 30px;
     align-items: center;
+    margin-top: 0%;
 }
 .libtn{
     width: 5rem;
@@ -123,5 +125,18 @@ button{
 }
 
 #rzp-button1{
+    margin-top: 0%;
     font-size: 1.5rem;
+}
+
+#leaderBoard{
+    margin-top: 0%;
+    margin-left: 300%;
+    font-size: 1.3rem;
+}
+
+#leaderList{
+    /* display: flex; */
+    margin-top: 5%;
+    margin-left: 10%;
 }

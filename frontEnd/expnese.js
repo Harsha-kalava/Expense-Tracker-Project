@@ -34,6 +34,7 @@ async function showUserExpense() {
   const parentElement = document.getElementById("list");
   const parentPremium = document.getElementById("razor-button")
   const childPremium = document.getElementById('rzp-button1')
+  const parentLeaderBoard = document.getElementById('leaderBoardConitaner')
   try {
     const expenseData = await axios.get(
       'http://localhost:3000/expense/get',{headers:{"Authorization":token}}
@@ -46,6 +47,11 @@ async function showUserExpense() {
         parentPremium.removeChild(childPremium)
         let textNode = document.createTextNode("Premium User");
         parentPremium.appendChild(textNode);
+        let leaderButton = document.createElement('button')
+        leaderButton.id = 'leaderBoard'
+        leaderButton.textContent = 'Leader Board'
+        parentLeaderBoard.appendChild(leaderButton)
+        leaderButton.onclick = leaderBoard
       }
 
       parentElement.innerHTML = ''
@@ -129,11 +135,26 @@ e.preventDefault();
 rzp1.on('payment.failed', function (response){
 alert(response.error.code);
 alert(response.error.description);
-//   alert(response.error.source);
-//   alert(response.error.step);
-//   alert(response.error.reason);
-//   alert(response.error.metadata.order_id);
-//   alert(response.error.metadata.payment_id);
 });
+}
 
+async function leaderBoard(e){
+  e.preventDefault()
+  console.log('clicked on leaderBoard button')
+  const token = sessionStorage.getItem("token")
+  const response  = await axios.get('http://localhost:3000/purchase/showleaderboard', {headers:{"Authorization":token}})
+  console.log(response.data.data);
+  let userPrices = response.data.data
+    userPrices.forEach(userPrice => {
+      const name = userPrice.user.name;
+      const totalPrice = userPrice.totalPrice;
+
+      const leaderli = document.createElement("li")
+      leaderli.className = 'litext'
+      leaderli.appendChild(
+        document.createTextNode(`${name}- ${totalPrice}`)
+      );  
+    document.getElementById("leaderList").appendChild(leaderli)
+    });
+    
 }
