@@ -22,6 +22,9 @@ const UserData = sequelize.define('user',{
     password:{
         type:Sequelize.STRING,
         allowNull:false
+    },
+    ispremium:{
+        type:Sequelize.STRING
     }
 })
 

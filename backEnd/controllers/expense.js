@@ -15,9 +15,11 @@ exports.addExpense = async (req,res)=>{
 exports.getExpense = async(req,res)=>{
     try{
         const id = req.user.id
+        const ispremium = Number(req.user.ispremium)
+        // console.log(req.user.ispremium,'consoling user')
         const expenseData = await Expense.findAll({where:{userId:id}})
         if(expenseData){
-            return res.status(200).json({success:true,message:expenseData})
+            return res.status(200).json({success:true,message:expenseData,premium:ispremium})
         }
     }
     catch(err){

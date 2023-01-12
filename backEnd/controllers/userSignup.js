@@ -27,6 +27,7 @@ exports.addUser = async (req, res, next) => {
             name: name,
             email: email,
             password: hash,
+            ispremium:false
           });
           res.status(201).json({ success: true, message: data});
         }

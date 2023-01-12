@@ -113,6 +113,15 @@ button{
 }
 .libtn{
     width: 5rem;
-    margin-left: 1rem;
-    
+    margin-left: 1rem;  
+}
+
+#razor-button{
+    display: flex;
+    justify-content:flex-end;
+    font-size: 2rem;
+}
+
+#rzp-button1{
+    font-size: 1.5rem;
 }
