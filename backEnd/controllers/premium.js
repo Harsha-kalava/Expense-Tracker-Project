@@ -10,15 +10,17 @@ const purchasepremium =async (req, res) => {
         const amount = 2500;
 
         rzp.orders.create({amount, currency: "INR"}, (err, order) => {
+            // console.log(amount);
             if(err) {
                 // throw new Error(err);
                 console.log(err)
             }
             console.log("order.id",order.id)
+            console.log(req.user,'user')
             req.user.createOrder({ orderId: order.id, status: 'PENDING'}).then(() => {
-                console.log('passed here')
-            })
-            .catch(err => {
+                return res.status(201).json({ order, key_id : rzp.key_id});
+
+            }).catch(err => {
                 throw new Error(err)
             })
         })
@@ -33,7 +35,7 @@ const purchasepremium =async (req, res) => {
         const {payment_id, order_id} = req.body;
         Order.findOne({where : {orderid : order_id}}).then(order => {
             order.update({ paymentId: payment_id, status: 'SUCCESSFUL'}).then(() => {
-                req.user.update({ispremiumuser: true})
+                req.user.update({ispremium: true})
                 return res.status(202).json({sucess: true, message: "Transaction Successful"});
             }).catch((err)=> {
                 throw new Error(err);

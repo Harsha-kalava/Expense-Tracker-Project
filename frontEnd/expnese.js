@@ -115,6 +115,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
            payment_id: response.razorpay_payment_id,
        }, { headers: {"Authorization" : token} }).then(() => {
            alert('You are a Premium User Now')
+           showUserExpense()
        }).catch(() => {
            alert('Something went wrong. Try Again!!!')
        })
@@ -134,4 +135,5 @@ alert(response.error.description);
 //   alert(response.error.metadata.order_id);
 //   alert(response.error.metadata.payment_id);
 });
+
 }

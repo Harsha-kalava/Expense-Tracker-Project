@@ -4,9 +4,9 @@ const User = require('../models/userSignup')
 exports.authenticate = async(req,res,next)=>{
     try{
         const token = req.header('Authorization')
-        if (!token) {
-            return res.status(401).json({success:false, message: 'No token provided'})
-          }
+        // if (!token) {
+        //     return res.status(401).json({success:false, message: 'No token provided'})
+        //   }
         console.log(token,'token')
         const user = jwt.verify(token,'Harsha')
         console.log(user,'user logging')
