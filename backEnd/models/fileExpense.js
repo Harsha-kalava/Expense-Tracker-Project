@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { DataTypes } = require('sequelize')
 const sequelize = require('../util/dataBase')
 
-const fileData = sequelize.define('file expense',{
+const fileData = sequelize.define('fileExpense',{
     id:{
         type:Sequelize.INTEGER,
         autoIncrement:true,
