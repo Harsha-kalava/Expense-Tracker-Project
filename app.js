@@ -37,7 +37,7 @@ resetPassword.belongsTo(User)
 User.hasMany(fileData)
 fileData.belongsTo(User)
 
-sequelize.sync({alter:true})
+sequelize.sync({force:true})
 .then((res)=>{
     app.listen(3000,()=>{
         console.log('app started running on 3000')
