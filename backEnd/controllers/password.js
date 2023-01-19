@@ -1,6 +1,7 @@
 const uuid = require("uuid");
 const sgMail = require("@sendgrid/mail");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer")
 
 const User = require("../models/userSignup");
 const resetPassword = require("../models/resetPassword");
@@ -8,7 +9,8 @@ const resetPassword = require("../models/resetPassword");
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where: { email: email } })
+    const userName = user.name
     if (user) {
       const id = uuid.v4();
       const resetData = await resetPassword.create({
@@ -16,40 +18,59 @@ const forgotPassword = async (req, res) => {
         active: true,
         userId: user.id,
       });
-      if (resetData) {
-        try {
-          console.log("data entered in reset password table successfully");
-        } catch (err) {
-          console.log(err);
-        }
+      let testAccount = await nodemailer.createTestAccount()
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: 'jarvis1@ethereal.email',
+            pass: 'EXUAYCZn7x83nnVdrY'
+        } 
+    })
+      let info = await transporter.sendMail({
+        from:'harshcode16@gmail.com', // sender address
+        to:email, // list of receivers
+        subject: "Reset password request", // Subject line
+        text: "click on the reset password link", // plain text body
+        html: `<p>Hey ${userName}, Click on the below link to rest your password</p><a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`, // html body
+      })
+      if(info){
+        return res.status(202).json({
+                  message: "Link to reset password sent to your mail ",
+                  sucess: true,
+                });
+      }else{
+        console.log('failed at node mailer',err)
       }
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    
+      // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-      const msg = {
-        to: email, // Change to your recipient
-        from: "harshcode16@gmail.com", // Change to your verified sender
-        subject: "Sending with SendGrid is Fun",
-        text: "and easy to do anywhere, even with Node.js",
-        html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
-      };
+      // const msg = {
+      //   to: email, // Change to your recipient
+      //   from: "harshcode16@gmail.com", // Change to your verified sender
+      //   subject: "Sending with SendGrid is Fun",
+      //   text: "and easy to do anywhere, even with Node.js",
+      //   html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
+      // };
 
-      sgMail
-        .send(msg)
-        .then((response) => {
-          // console.log(response[0].statusCode);
-          // console.log(response[0].headers);
-          return res.status(response[0].statusCode).json({
-            message: "Link to reset password sent to your mail ",
-            sucess: true,
-          });
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    } else {
-      throw new Error("User doesnt exist");
+    //   sgMail
+    //     .send(msg)
+    //     .then((response) => {
+    //       // console.log(response[0].statusCode);
+    //       // console.log(response[0].headers);
+    //       return res.status(response[0].statusCode).json({
+    //         message: "Link to reset password sent to your mail ",
+    //         sucess: true,
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       throw new Error(error);
+    //     });
+    // } else {
+    //   throw new Error("User doesnt exist");
     }
-  } catch (err) {
+  }
+   catch (err) {
     console.log(err);
   }
 };
@@ -106,7 +127,7 @@ const updatepassword = (req, res) => {
                   user.update({ password: hash }).then(() => {
                     res
                       .status(201)
-                      .json({ message: "Successfuly update the new password" });
+                      .json({ message: "Successfuly update the new password" })
                   });
                 });
               });

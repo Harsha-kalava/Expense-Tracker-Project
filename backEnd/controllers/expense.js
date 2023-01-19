@@ -1,5 +1,6 @@
 const Expense = require('../models/expense')
 const User = require('../models/userSignup')
+const AWS = require('aws-sdk')
 
 exports.addExpense = async (req,res)=>{
     try{
@@ -39,4 +40,47 @@ exports.delData = async(req,res)=>{
     catch(err){
         res.status(500).json({success:false,message:'unable to delete feilds'})
     }
+}
+
+exports.downloadExpense = async(req,res)=>{
+    const userId = req.user.id
+    try{
+        const checkUserPremium = await User.findOne({where:{id:userId}})
+        console.log(checkUserPremium.ispremium,'premium',typeof(checkUserPremium.ispremium))
+        if(checkUserPremium.ispremium === '1'){
+            const expenses = await Expense.findAll({where:{userId:userId}})
+            const stringifiedExpenses = JSON.stringify(expenses)
+            const fileName = `Expense${userId}/${new Date()}.txt`
+            const fileURL = await uploadToS3(stringifiedExpenses,fileName)
+            return res.status(201).json({fileURL,success:true})
+
+        }else{
+            throw new Error
+        }
+    }catch(err){
+        return res.status(403).json({success:false,message:'Not a premium user(or) failed at S3',error:err})
+    }        
+}
+
+function uploadToS3(data,fileName){  
+    let s3bucket = new AWS.S3({
+        accessKeyId:process.env.IAM_USER_KEY,
+        secretAccessKey:process.env.IAM_USER_SECRET
+    })
+    var params = {
+        Bucket:process.env.BUCKET_NAME,
+        Key:fileName,
+        Body:data,
+        ACL:'public-read'
+    }
+   return new Promise((resolve,reject)=>{
+    s3bucket.upload(params,(err,s3response)=>{
+        if(err){
+            console.log('something went wrong',err)
+            reject(err)
+        }else{
+            resolve(s3response.Location)
+        }
+    })
+   })
 }

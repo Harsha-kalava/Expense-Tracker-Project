@@ -60,6 +60,7 @@ button{
     color: black;
     background-color: #a790a5;
     border: #54414e;
+    text-align: center;
 }
 
 #error1{
@@ -143,4 +144,13 @@ button{
 
 .hide{
     display:none;
+}
+
+#downloadexpense{
+    display: flex;
+    margin-top: 16rem;
+    margin-left: -12.7rem;
+    font-size: 1rem;
+    /* vertical-align:middle; */
+    display:table-cell;
 }

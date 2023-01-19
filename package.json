@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
+    "aws-sdk": "^2.1297.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3",
     "node": "^19.3.0",
+    "nodemailer": "^6.9.0",
     "nodemon": "^2.0.20",
     "razorpay": "^2.8.4",
     "sequelize": "^6.28.0",
