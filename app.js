@@ -8,6 +8,7 @@ const User = require('./backEnd/models/userSignup')
 const Expense = require('./backEnd/models/expense')
 const Order = require('./backEnd/models/orders')
 const resetPassword = require('./backEnd/models/resetPassword')
+const fileData = require('./backEnd/models/fileExpense')
 
 const userRoutes = require('./backEnd/routes/userSignup')
 const expenseRoutes = require('./backEnd/routes/expense')
@@ -32,6 +33,9 @@ Order.belongsTo(User)
 
 User.hasMany(resetPassword)
 resetPassword.belongsTo(User)
+
+User.hasMany(fileData)
+fileData.belongsTo(User)
 
 sequelize.sync({alter:true})
 .then((res)=>{

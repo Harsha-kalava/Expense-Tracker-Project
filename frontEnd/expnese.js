@@ -35,6 +35,7 @@ async function showUserExpense() {
   const parentPremium = document.getElementById("razor-button")
   const childPremium = document.getElementById('rzp-button1')
   const parentLeaderBoard = document.getElementById('leaderBoardConitaner')
+  const parentDownload = document.getElementById('download')
   try {
     const expenseData = await axios.get(
       'http://localhost:3000/expense/get',{headers:{"Authorization":token}}
@@ -42,7 +43,7 @@ async function showUserExpense() {
     console.log(expenseData,'expense data')
     let data = expenseData.data.message;
     if (expenseData.status === 200) {
-      // console.log(expenseData.data.message)
+      console.log(typeof(expenseData.data.premium))
       if(expenseData.data.premium === 1){
         parentPremium.removeChild(childPremium)
         let textNode = document.createTextNode("Premium User");
@@ -51,8 +52,14 @@ async function showUserExpense() {
         leaderButton.id = 'leaderBoard'
         leaderButton.textContent = 'Leader Board'
         parentLeaderBoard.appendChild(leaderButton)
+
         leaderButton.onclick = leaderBoard
-        document.getElementById("downloadexpense").classList.remove("hide");
+        let downloadButton = document.createElement('button')
+        downloadButton.id = 'downloadexpense'
+        downloadButton.textContent = 'Download File'
+        downloadButton.onclick = download
+        parentDownload.appendChild(downloadButton)
+        // document.getElementById("downloadexpense").classList.remove("hide");
       }
 
       parentElement.innerHTML = ''

@@ -1,6 +1,7 @@
 const Expense = require('../models/expense')
 const User = require('../models/userSignup')
-const AWS = require('aws-sdk')
+const S3service = require('../services/s3')
+const fileData = require('../models/fileExpense')
 
 exports.addExpense = async (req,res)=>{
     try{
@@ -51,7 +52,15 @@ exports.downloadExpense = async(req,res)=>{
             const expenses = await Expense.findAll({where:{userId:userId}})
             const stringifiedExpenses = JSON.stringify(expenses)
             const fileName = `Expense${userId}/${new Date()}.txt`
-            const fileURL = await uploadToS3(stringifiedExpenses,fileName)
+            const fileURL = await S3service.uploadToS3(stringifiedExpenses,fileName)
+            if(fileURL){
+                await fileData.create({
+                    URL:fileURL,
+                    userId:userId
+                })
+            }
+            const previousFiles = await fileData.findAll({where:{userId:userId}})
+            console.log(previousFiles.dataValues)
             return res.status(201).json({fileURL,success:true})
 
         }else{
@@ -62,25 +71,3 @@ exports.downloadExpense = async(req,res)=>{
     }        
 }
 
-function uploadToS3(data,fileName){  
-    let s3bucket = new AWS.S3({
-        accessKeyId:process.env.IAM_USER_KEY,
-        secretAccessKey:process.env.IAM_USER_SECRET
-    })
-    var params = {
-        Bucket:process.env.BUCKET_NAME,
-        Key:fileName,
-        Body:data,
-        ACL:'public-read'
-    }
-   return new Promise((resolve,reject)=>{
-    s3bucket.upload(params,(err,s3response)=>{
-        if(err){
-            console.log('something went wrong',err)
-            reject(err)
-        }else{
-            resolve(s3response.Location)
-        }
-    })
-   })
-}

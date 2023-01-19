@@ -142,9 +142,9 @@ button{
     margin-left: 10%;
 }
 
-.hide{
+/* .hide{
     display:none;
-}
+} */
 
 #downloadexpense{
     display: flex;
