@@ -149,8 +149,28 @@ button{
 #downloadexpense{
     display: flex;
     margin-top: 16rem;
-    margin-left: -12.7rem;
+    margin-left: -12.79rem;
     font-size: 1rem;
     /* vertical-align:middle; */
     display:table-cell;
 }
+
+#files{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20.5rem;
+    margin-left: -11.5rem;
+}
+
+#filetext{
+    display: flex;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    margin-left: -11.5rem;
+}
+
+a.download-link {
+    display: block;
+    /* margin-left: 5rem; */
+    margin-top: 0.5rem;
+  }

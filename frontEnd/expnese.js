@@ -32,39 +32,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function showUserExpense() {
   const token = sessionStorage.getItem("token");
   const parentElement = document.getElementById("list");
-  const parentPremium = document.getElementById("razor-button")
-  const childPremium = document.getElementById('rzp-button1')
-  const parentLeaderBoard = document.getElementById('leaderBoardConitaner')
-  const parentDownload = document.getElementById('download')
+  const parentFile = document.getElementById('files')
+  
   try {
     const expenseData = await axios.get(
       'http://localhost:3000/expense/get',{headers:{"Authorization":token}}
     );
     console.log(expenseData,'expense data')
-    let data = expenseData.data.message;
+    let data = expenseData.data.message
+    const fileUser = expenseData.data.hasFiles
     if (expenseData.status === 200) {
-      console.log(typeof(expenseData.data.premium))
-      if(expenseData.data.premium === 1){
-        parentPremium.removeChild(childPremium)
-        let textNode = document.createTextNode("Premium User");
-        parentPremium.appendChild(textNode);
-        let leaderButton = document.createElement('button')
-        leaderButton.id = 'leaderBoard'
-        leaderButton.textContent = 'Leader Board'
-        parentLeaderBoard.appendChild(leaderButton)
-
-        leaderButton.onclick = leaderBoard
-        let downloadButton = document.createElement('button')
-        downloadButton.id = 'downloadexpense'
-        downloadButton.textContent = 'Download File'
-        downloadButton.onclick = download
-        parentDownload.appendChild(downloadButton)
-        // document.getElementById("downloadexpense").classList.remove("hide");
-      }
+      premium(expenseData)
+      // console.log(typeof(expenseData.data.premium))
 
       parentElement.innerHTML = ''
-      data.forEach((info) => {
-        console.log(info, "data");
+      await data.forEach((info) => {
+        // console.log(info, "data");
         const li = document.createElement("li")
         li.id = `${info.id}`
         li.className = 'litext'
@@ -83,6 +66,17 @@ async function showUserExpense() {
         li.appendChild(delBtn)
         parentElement.appendChild(li)
       });
+
+      for (let i = 0; i < fileUser.length; i++) {
+        const link = document.createElement('a');
+        // console.log(fileUser[i].URL)
+        link.href = fileUser[i].URL;
+        link.download = 'file-' + (i+1) + '.csv';
+        link.innerHTML = 'Downloaded file-' + (i+1);
+        link.classList.add("download-link")
+        parentFile.appendChild(link);
+      }
+      
     }
   } catch (err) {
     console.log(err)
@@ -123,7 +117,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
    },
    // This handler function will handle the success payment
    "handler": function (response) {
-       console.log(response);
+      //  console.log(response);
        axios.post('http://localhost:3000/purchase/update',{
            order_id: options.order_id,
            payment_id: response.razorpay_payment_id,
@@ -151,7 +145,7 @@ async function leaderBoard(e){
   console.log('clicked on leaderBoard button')
   const token = sessionStorage.getItem("token")
   const response  = await axios.get('http://localhost:3000/purchase/showleaderboard', {headers:{"Authorization":token}})
-  console.log(response.data.data);
+  // console.log(response.data.data);
   let userPrices = response.data.data
     userPrices.forEach(userPrice => {
       const name = userPrice.user.name;
@@ -171,6 +165,7 @@ function download(){
   const token = sessionStorage.getItem("token")
   axios.get('http://localhost:3000/user/download',{headers:{"Authorization":token}})
   .then((response) => {
+    console.log(response.data)
       if(response.status === 201){
           //the bcakend is essentially sending a download link
           //  which if we open in browser, the file would download
@@ -181,9 +176,49 @@ function download(){
       } else {
           throw new Error(response.data.message)
       }
+      
 
   })
   .catch((err) => {
       console.log(err)
   });
+}
+
+function premium(expense){
+  
+  const parentPremium = document.getElementById("razor-button")
+  const childPremium = document.getElementById('rzp-button1')
+  const parentLeaderBoard = document.getElementById('leaderBoardConitaner')
+  const parentDownload = document.getElementById('download')
+  const files = expense.data.hasFiles
+  console.log(files.length)
+  if(expense.data.premium === 1){
+    parentPremium.removeChild(childPremium)
+    let textNode = document.createTextNode("Premium User");
+    parentPremium.appendChild(textNode);
+    let leaderButton = document.createElement('button')
+    leaderButton.id = 'leaderBoard'
+    leaderButton.textContent = 'Leader Board'
+    parentLeaderBoard.appendChild(leaderButton)
+    leaderButton.onclick = leaderBoard
+    
+    let downloadButton = document.createElement('button')
+    downloadButton.id = 'downloadexpense'
+    downloadButton.textContent = 'Download File'
+    downloadButton.onclick = download
+    parentDownload.appendChild(downloadButton)
+
+    if(files.length > 0){
+      let textNode = document.createElement("p")
+      textNode.id = 'filetext'
+      textNode.textContent = 'Previous records'
+      parentDownload.appendChild(textNode);
+    }else{
+      let textNode = document.createElement("p")
+      textNode.id = 'filetext'
+      textNode.textContent = 'No Previous records'
+      parentDownload.appendChild(textNode);
+    }
+  }
+ 
 }

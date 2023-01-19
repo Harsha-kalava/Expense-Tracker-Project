@@ -20,8 +20,9 @@ exports.getExpense = async(req,res)=>{
         const ispremium = Number(req.user.ispremium)
         // console.log(req.user.ispremium,'consoling user')
         const expenseData = await Expense.findAll({where:{userId:id}})
+        const userFiles = await fileData.findAll({where:{userId:id}})
         if(expenseData){
-            return res.status(200).json({success:true,message:expenseData,premium:ispremium})
+            return res.status(200).json({success:true,message:expenseData,premium:ispremium,hasFiles:userFiles})
         }
     }
     catch(err){
@@ -60,8 +61,8 @@ exports.downloadExpense = async(req,res)=>{
                 })
             }
             const previousFiles = await fileData.findAll({where:{userId:userId}})
-            console.log(previousFiles.dataValues)
-            return res.status(201).json({fileURL,success:true})
+            console.log(previousFiles)
+            return res.status(201).json({fileURL,success:true,userData:previousFiles})
 
         }else{
             throw new Error
