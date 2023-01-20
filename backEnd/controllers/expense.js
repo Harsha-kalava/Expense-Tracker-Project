@@ -36,8 +36,7 @@ exports.delData = async(req,res)=>{
         const listId = req.params.id
         const expense = await Expense.destroy({where:{id:listId,userId:user}})
         console.log(expense)
-        res.status(200).json({message:'successfully deleted'})
-          
+        res.status(200).json({message:'successfully deleted'})       
     }
     catch(err){
         res.status(500).json({success:false,message:'unable to delete feilds'})
@@ -77,11 +76,11 @@ exports.getExpensesPerPage = async(req,res)=>{
     try{
         console.log(req.query)
         let userId = req.user.id
-        if(req.query.page=='undefined'||req.query.expPerPage=='undefined'){
-            req.query.page = 1
-            req.query.expPerPage = 2
-            console.log('done')
-        }
+        // if(req.query.page=='undefined'||req.query.expPerPage=='undefined'){
+        //     req.query.page = 1
+        //     req.query.expPerPage = 2
+        //     console.log('done')
+        // }
         const ispremium = Number(req.user.ispremium)
         let page = Number(req.query.page || 1)
         let expensesPerPage = Number(req.query.expPerPage)
@@ -98,6 +97,7 @@ exports.getExpensesPerPage = async(req,res)=>{
             hasNextPage:(expensesPerPage*page)<totalExpenses,
             nextPage:page+1,
             hasPreviousPage:page>1,
+            previousPage:page-1,
             limit:expensesPerPage,
             lastPage:lastPage,
             ispremium:ispremium,
