@@ -174,3 +174,11 @@ a.download-link {
     /* margin-left: 5rem; */
     margin-top: 0.5rem;
   }
+
+#pagination{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20.5rem;
+    width: 7rem;
+    margin-left: -13rem;
+}
