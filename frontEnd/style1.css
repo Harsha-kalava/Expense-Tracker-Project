@@ -107,6 +107,8 @@ button{
     display: flex;
     margin-top: 2rem;
     justify-content: center;
+    margin-left: 25rem;
+    margin-right: -10rem;
 }
 
 .litext{
@@ -128,6 +130,7 @@ button{
 #rzp-button1{
     margin-top: 0%;
     font-size: 1.5rem;
+    margin-left: 20rem;
 }
 
 #leaderBoard{
@@ -139,7 +142,7 @@ button{
 #leaderList{
     /* display: flex; */
     margin-top: 5%;
-    margin-left: 10%;
+    margin-left: 10rem;
 }
 
 /* .hide{
@@ -178,7 +181,28 @@ a.download-link {
 #pagination{
     display: flex;
     justify-content: space-between;
-    margin-top: 20.5rem;
-    width: 7rem;
-    margin-left: -13rem;
+    margin-top: 25.2rem;
+    width: 2rem;
+    margin-left: -12rem;
+    height: -50rem;
+}
+
+#price{
+    text-align: center;
+    font-size: 1rem;
+    background-color: #B0A8B9;
+    border:1px solid black;
+    width: 3rem;
+    height: 1.5rem;
+}
+
+#priceList{
+    margin-top: 27rem;
+    margin-left: -20rem;
+}
+
+.pageButton{
+    width: 4rem;
+    height: 1.5rem;
+    
 }

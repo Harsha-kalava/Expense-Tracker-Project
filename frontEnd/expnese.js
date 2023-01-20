@@ -21,9 +21,13 @@ async function expense(e) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    // const rowValue = await rowChange()
+    // console.log(rowValue)
+    const rowValue = localStorage.getItem('expPerPage')
+    console.log(rowValue)
     const token = sessionStorage.getItem("token");
     let page = 1
-    let expPerPage = 2
+    let expPerPage = rowValue
     const expenseData = await axios.get(
       `http://localhost:3000/expense/get/expensePerPage?page=${page}&expPerPage=${expPerPage}`,
       { headers: { Authorization: token } }
@@ -42,8 +46,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         parentFile.appendChild(link);
       }
     }
-    showUserExpense(expenseData);
+    showUserExpense(expenseData)
     showPagination(expenseData.data)
+
   } catch (err) {
     console.log(err);
   }
@@ -76,6 +81,60 @@ async function showUserExpense(expenseData) {
   } catch (err) {
     console.log(err);
   }
+}
+
+function showPagination({currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage,firstPage}){
+  console.log(currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage,firstPage)
+  const grandParent = document.getElementById('data')
+  const midParent = document.getElementById('list')
+  const ParentElement = document.getElementById('pagination')
+  currentPage = Number(currentPage)
+  if(hasPreviousPage){
+    const btn1 = document.createElement('button')
+    btn1.className = 'pageButton'
+    btn1.innerHTML = '<<'
+    btn1.addEventListener('click',()=>getItems(previousPage))
+    ParentElement.appendChild(btn1)
+    midParent.appendChild(btn1)
+  }
+
+  if(hasNextPage){
+    const btn2 = document.createElement('button')
+    btn2.className = 'pageButton'
+    btn2.innerHTML = '>>'
+    btn2.addEventListener('click',()=>getItems(nextPage))
+    ParentElement.appendChild(btn2)
+    midParent.appendChild(btn2)
+  }
+  grandParent.appendChild(midParent)
+}
+
+async function getItems(page){
+  console.log('entered in get items')
+  
+  // console.log(expPerPage)
+  try{
+    const expPerPage = localStorage.getItem('expPerPage')
+    const token = sessionStorage.getItem("token");
+    console.log(token,expPerPage)
+    const parentSection = document.getElementById('list')
+    const ParentElement = document.getElementById('pagination')
+    const expenseData = await axios.get(
+      `http://localhost:3000/expense/get/expensePerPage?page=${page}&expPerPage=${expPerPage}`,
+      { headers: { Authorization: token } }
+    );
+      console.log('after expense data')
+    parentSection.innerHTML=''
+    ParentElement.innerHTML=''
+    console.log(expenseData.data)
+    showUserExpense(expenseData)
+    showPagination(expenseData.data)
+  
+  }
+  catch(err){
+    console.log(err)
+  }
+  
 }
 
 async function delData(infoId) {
@@ -232,50 +291,12 @@ function premium(expense) {
   }
 }
 
-function showPagination({currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage,firstPage}){
-  console.log(currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage,firstPage)
-  const ParentElement = document.getElementById('pagination')
-  currentPage = Number(currentPage)
-
-  if(hasPreviousPage){
-    const btn1 = document.createElement('button')
-    btn1.className = 'pageButton'
-    btn1.innerHTML = '<<'
-    btn1.addEventListener('click',()=>getItems(previousPage))
-    ParentElement.appendChild(btn1)
-  }
-
-  if(hasNextPage && nextPage !== lastPage){
-    const btn2 = document.createElement('button')
-    btn2.className = 'pageButton'
-    btn2.innerHTML = '>>'
-    btn2.addEventListener('click',()=>getItems(nextPage))
-    ParentElement.appendChild(btn2)
-  }
-}
-
-async function getItems(page){
-  console.log('entered in get items')
-  try{
-    const token = sessionStorage.getItem("token");
-    console.log(token)
-    let expPerPage = 2
-    const parentSection = document.getElementById('list')
-    const ParentElement = document.getElementById('pagination')
-    const expenseData = await axios.get(
-      `http://localhost:3000/expense/get/expensePerPage?page=${page}&expPerPage=${expPerPage}`,
-      { headers: { Authorization: token } }
-    );
-      console.log('after expense data')
-    parentSection.innerHTML=''
-    ParentElement.innerHTML=''
-    console.log(expenseData.data)
-    showUserExpense(expenseData)
-    showPagination(expenseData.data)
-  
-  }
-  catch(err){
-    console.log(err)
-  }
-  
+function rowChange(e){
+  // e.preventDefault()
+  console.log(e.target.value,'value')
+  console.log(typeof(e.target.value))
+  const rowValue = Number(e.target.value)
+  console.log(typeof(rowValue))
+  localStorage.setItem("expPerPage", rowValue)
+  location.reload()
 }
