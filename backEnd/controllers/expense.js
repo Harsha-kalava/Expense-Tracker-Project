@@ -76,8 +76,7 @@ exports.getExpensesPerPage = async(req,res)=>{
     try{
         console.log(req.query)
         let userId = req.user.id
-        // if(req.query.page=='undefined'||req.query.expPerPage=='undefined'){
-        //     req.query.page = 1
+        // if(req.query.expPerPage===0||'undefined'){
         //     req.query.expPerPage = 2
         //     console.log('done')
         // }
@@ -105,7 +104,7 @@ exports.getExpensesPerPage = async(req,res)=>{
         })
     }
     catch(err){
-        console.log(err)
+        console.log(err,'error happend at expense per page')
     }
     
 }
