@@ -9,6 +9,7 @@ router.get('/user/download/',userAuthentication.authenticate,expenseController.d
 
 router.post('/expense/add',userAuthentication.authenticate,expenseController.addExpense)
 router.get('/expense/get/',userAuthentication.authenticate,expenseController.getExpense)
+router.get('/expense/get/expensePerPage',userAuthentication.authenticate,expenseController.getExpensesPerPage)
 
 router.delete('/expense/delData/:id',userAuthentication.authenticate,expenseController.delData)
 

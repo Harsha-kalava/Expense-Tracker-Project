@@ -35,16 +35,17 @@ async function showUserExpense() {
   const parentFile = document.getElementById('files')
   
   try {
+    let page
+    let expPerPage
     const expenseData = await axios.get(
-      'http://localhost:3000/expense/get',{headers:{"Authorization":token}}
+      `http://localhost:3000/expense/get/expensePerPage?page=${page}&expPerPage=${expPerPage}`,{headers:{"Authorization":token}}
     );
-    console.log(expenseData,'expense data')
-    let data = expenseData.data.message
+    console.log(expenseData.data.ispremium,'expense data')
+    let data = expenseData.data.allExpense
     const fileUser = expenseData.data.hasFiles
     if (expenseData.status === 200) {
       premium(expenseData)
       // console.log(typeof(expenseData.data.premium))
-
       parentElement.innerHTML = ''
       await data.forEach((info) => {
         // console.log(info, "data");
@@ -66,7 +67,7 @@ async function showUserExpense() {
         li.appendChild(delBtn)
         parentElement.appendChild(li)
       });
-
+      parentFile.innerHTML=''
       for (let i = 0; i < fileUser.length; i++) {
         const link = document.createElement('a');
         // console.log(fileUser[i].URL)
@@ -185,14 +186,17 @@ function download(){
 }
 
 function premium(expense){
-  
+  console.log('enterd here')
   const parentPremium = document.getElementById("razor-button")
   const childPremium = document.getElementById('rzp-button1')
   const parentLeaderBoard = document.getElementById('leaderBoardConitaner')
   const parentDownload = document.getElementById('download')
   const files = expense.data.hasFiles
   console.log(files.length)
-  if(expense.data.premium === 1){
+  if(expense.data.ispremium === 1){
+    if(!childPremium){
+      return
+    }
     parentPremium.removeChild(childPremium)
     let textNode = document.createTextNode("Premium User");
     parentPremium.appendChild(textNode);

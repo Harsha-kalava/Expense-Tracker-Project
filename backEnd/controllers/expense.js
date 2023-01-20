@@ -7,7 +7,7 @@ exports.addExpense = async (req,res)=>{
     try{
         const {price,desc,categ} = req.body
         const result =  await req.user.createExpense({price,desc,categ})
-        res.status(201).json({newExpense:[result],message:'successful'})
+        res.status(201).json({allExpense:[result],message:'successful'})
     }
     catch(err){
         res.status(500).json({success:false,message:'unable to create expense table'})
@@ -72,3 +72,40 @@ exports.downloadExpense = async(req,res)=>{
     }        
 }
 
+exports.getExpensesPerPage = async(req,res)=>{
+    
+    try{
+        console.log(req.query)
+        let userId = req.user.id
+        if(req.query.page=='undefined'||req.query.expPerPage=='undefined'){
+            req.query.page = 1
+            req.query.expPerPage = 2
+            console.log('done')
+        }
+        const ispremium = Number(req.user.ispremium)
+        let page = Number(req.query.page || 1)
+        let expensesPerPage = Number(req.query.expPerPage)
+        console.log(page,expensesPerPage)
+        const offset = (page-1)*expensesPerPage
+        const expneseInfo = await Expense.findAll({where:{userId:userId},offset: offset, limit: expensesPerPage})
+        let totalExpenses = await Expense.count({where:{userId:userId}})
+        const userFiles = await fileData.findAll({where:{userId:userId}})
+        console.log(totalExpenses)
+        let lastPage = Math.ceil(totalExpenses/expensesPerPage)
+        return res.status(200).json({
+            allExpense:expneseInfo,
+            currentPage:page,
+            hasNextPage:(expensesPerPage*page)<totalExpenses,
+            nextPage:page+1,
+            hasPreviousPage:page>1,
+            limit:expensesPerPage,
+            lastPage:lastPage,
+            ispremium:ispremium,
+            hasFiles:userFiles
+        })
+    }
+    catch(err){
+        console.log(err)
+    }
+    
+}
