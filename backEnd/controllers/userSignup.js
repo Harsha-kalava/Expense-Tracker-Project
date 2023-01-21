@@ -13,7 +13,7 @@ function isValidInput(str){
 }
 
 function generateAccessToken(id){
-  return jwt.sign({userId:id},'Harsha')
+  return jwt.sign({userId:id},process.env.TOKEN)
 }
 
 exports.addUser = async (req, res, next) => {
