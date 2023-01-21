@@ -8,7 +8,7 @@ exports.authenticate = async(req,res,next)=>{
         //     return res.status(401).json({success:false, message: 'No token provided'})
         //   }
         console.log(token,'token')
-        const user = jwt.verify(token,'Harsha')
+        const user = jwt.verify(token,process.env.TOKEN)
         console.log(user,'user logging')
         User.findByPk(user.userId).then(user=>{
             req.user=user

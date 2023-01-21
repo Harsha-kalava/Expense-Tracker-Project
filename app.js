@@ -2,6 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
+const helmet = require("helmet")
+const morgan = require('morgan')
+const fs = require('fs')
+const path = require('path')
 
 const sequelize = require('./backEnd/util/dataBase')
 const User = require('./backEnd/models/userSignup')
@@ -15,10 +19,16 @@ const expenseRoutes = require('./backEnd/routes/expense')
 const premiumRoutes = require('./backEnd/routes/premium')
 const forgotRoutes = require('./backEnd/routes/password')
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),
+{flags:'a'}
+)
+
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 dotenv.config()
+app.use(helmet())
+app.use(morgan('combined',{stream:accessLogStream}))
 
 app.use(userRoutes)
 app.use(expenseRoutes)
@@ -39,7 +49,7 @@ fileData.belongsTo(User)
 
 sequelize.sync({alter:true})
 .then((res)=>{
-    app.listen(3000,()=>{
-        console.log('app started running on 3000')
+    app.listen(process.env.PORT||3000,()=>{
+        console.log('app started running')
     })
 })
