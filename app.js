@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
+dotenv.config()
 const helmet = require("helmet")
 const morgan = require('morgan')
 const fs = require('fs')
@@ -26,7 +27,8 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-dotenv.config()
+
+console.log(process.env.DATABASE_USER)
 app.use(helmet())
 app.use(morgan('combined',{stream:accessLogStream}))
 
